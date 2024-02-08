@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBell } from '@fortawesome/free-regular-svg-icons';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [notifRes, setNotifRes] = useState()
-     /*   useEffect(() => {
+   /*      useEffect(() => {
     const interval = setInterval(() => {
       fetch('http://localhost:3000/api/scan')
         .then(response => response.json())
@@ -22,7 +23,7 @@ function App() {
 
     // This is important to clear the interval when the component unmounts
     return () => clearInterval(interval);
-  }, [])    */
+  }, [])  */  
   useEffect(() => {
       fetch('http://localhost:3000/api/sites')
         .then(response => response.json())
@@ -45,12 +46,24 @@ function App() {
     .then(data => setNotifRes(data))
     .catch(error => console.log(error))
   }
+  /* if(notifRes !== undefined){
+    setOpen(false)
+    setSign(false)
+  } */
   //console.log(data)
  //console.log(email)
- console.log(notifRes)
+// console.log(notifRes)
   return (
     <>
     <div className="min-h-screen w-full bg-slate-700">
+      {notifRes && 
+      <div className="inset-0 fixed flex justify-center items-center">
+        <div className="bg-white min-w-[8rem] rounded p-2 flex justify-between items-center z-50">
+        <FontAwesomeIcon icon={faCheckCircle} />
+          <h1 className="font-semibold ml-2">{notifRes.success}</h1>
+        </div>
+        </div>
+      }
       { sign &&
         <div className="inset-0 fixed flex justify-center items-center">
           <div className="bg-white min-w-[8rem] rounded p-2">

@@ -3,16 +3,18 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { config as dotenvConfig } from 'dotenv';
 import AdblockerPlugin from 'puppeteer-extra-plugin-adblocker';
 import scan from './models/site.model.js';
-
-
-
+import notifications from './models/email.model.js';
+import Mailjet from 'node-mailjet';
+import dotenv from 'dotenv';
+dotenv.config();
+const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
 
 const values = ['Wrong', '2-Step', 'keep', 'Verification', "changed", "find", "Step", "email", "Check", "check", "2", "sent", "valid", "locked", "Type", "Open", "verify", "Verify"];
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdblockerPlugin());
-dotenvConfig();
 
 
+let sendResult;
   export const  scanSite = async (req,res) => {
    async function getLatestChapter(urls) {
     const browser = await puppeteer.launch({
@@ -30,7 +32,6 @@ dotenvConfig();
       const page = await browser.newPage();
       await page.setUserAgent(ua);
       await page.goto(url, { waitUntil: 'networkidle2' });
-
     // Extract the latest chapter from url 
     if(url === urls[1]){
         for (let i = 0; i < 27; i++) {
@@ -84,17 +85,11 @@ dotenvConfig();
 const url = ["https://ww4.readkingdom.com/manga/kingdom/", "https://ww10.readonepiece.com/","https://ww3.readvinlandsaga.com/","https://ww3.readjujutsukaisen.com/","https://ww8.dbsmanga.com/"];
 getLatestChapter(url).then(async results => {
     for (const result of results) {
-     // console.log(`The latest chapter is: ${result.chapter}`);
-     // console.log(`The heading text is: ${result.url1}`);
-
       // Fetch the previous chapter information from the database
       const previousChapter = await scan.findOne({ chapter: result.chapter });
-
       // Check if the latest chapter is the same as the previous fetch
       if (previousChapter && previousChapter.url === result.url1) {
-       // console.log('The latest chapter is the same as the previous fetch');
       } else {
-       // console.log('The latest chapter is different from the previous fetch');
 
         // Delete the previous chapter information
         if (previousChapter) {
@@ -103,13 +98,43 @@ getLatestChapter(url).then(async results => {
         if(previousChapter === "chromewebdata" ){
           await scan.deleteOne({ chapter: result.chapter})
         }
-
         // Save the latest chapter information
         const newChapter = new scan({ chapter: result.chapter, url: result.url1 });
+        
         await newChapter.save();
       }
     }
-
+    const all = await notifications.find();
+    all.map((email) => {
+      const request = mailjet.post('send', {'version': 'v3.1'})
+        .request({
+          "Messages":[
+            {
+              "From": {
+                "Email": "htooe220@gmail.com",
+                "Name": "htooe220@gmail.com"
+              },
+              "To": [
+                {
+                  "Email": email.email,
+                  "Name": email.email
+                }
+              ],
+              "Subject": "Signed up for notifications",
+              "TextPart": `Hello ${email.email}!`,
+              "HTMLPart": `<h3>New scans or chapters are out!</h3><br />visit/<a href="https://ww4.readkingdom.com/manga/kingdom/"></a>`
+            }
+          ]
+        })   
+      request
+        .then((result) => {
+          //  console.log(result.body)
+          res.status(200).json({success: "Succesfully signed up for notifications"})
+        })
+        .catch((err) => {
+          console.log(err.statusCode)
+        });
+    })
     res.status(200).send(results);
   });
 }
