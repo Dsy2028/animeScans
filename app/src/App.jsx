@@ -11,6 +11,7 @@ function App() {
   const [sign, setSign] = useState(false)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
+  const f = 0;
      /*   useEffect(() => {
     const interval = setInterval(() => {
       fetch('http://localhost:3000/api/scan')
