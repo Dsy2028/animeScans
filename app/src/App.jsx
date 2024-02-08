@@ -9,6 +9,8 @@ function App() {
   const [data, setData] = useState()
   const [open, setOpen] = useState(false)
   const [sign, setSign] = useState(false)
+  const [email, setEmail] = useState('')
+  const [phone, setPhone] = useState('')
      /*   useEffect(() => {
     const interval = setInterval(() => {
       fetch('http://localhost:3000/api/scan')
@@ -30,18 +32,45 @@ function App() {
   const toggleDropdown = () => {
     setOpen((prevOpen) => !prevOpen);
   };
+  const sendEmail = () => {
+    fetch('http://localhost:3000/api/email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({email: email, phone: phone})
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.log(error))
+  }
   //console.log(data)
- //console.log(open)
+ //console.log(email)
   return (
     <>
     <div className="min-h-screen w-full bg-slate-700">
-      {/* <h1 className='font-semibold text-white text-3xl text-center'>Latest Chapters</h1> */}
+      { sign &&
+        <div className="inset-0 fixed flex justify-center items-center">
+          <div className="bg-white min-w-[8rem] rounded p-2">
+            <div className="flex justify-between mb-1">
+              <h1 className="font-semibold">Set Up Notifications</h1>
+            <button onClick={() => setSign(false)} className="bg-fuchsia-600 rounded text-white">close</button>
+            </div>
+            <div className="flex flex-col">
+            <input type="text" placeholder="email" className="rounded border-2 p-1 mb-2" onChange={(e) => setEmail(e.target.value)}></input>
+            <input type="text" placeholder="phone" className="rounded border-2 p-1 mb-2" onChange={(e) => setPhone(e.target.value)}></input>
+            <button className="bg-fuchsia-600 w-full rounded text-white" onClick={() => sendEmail()}>Submit</button>
+            </div>
+          </div>
+
+        </div>
+      }
       <div className="mb-3 flex justify-end">
         <div className="flex flex-col">
-      <FontAwesomeIcon icon={faBell} className="fa-xl text-white mt-2 mr-2" onClick={() => toggleDropdown()} />
+      <FontAwesomeIcon icon={faBell} className="fa-xl text-white mt-2 mr-2 cursor-pointer" onClick={() => toggleDropdown()} />
       <div className="relative ">
         {open &&
-        <div className="bg-white w-[6rem] p-2 h-[8rem] rounded absolute right-3 ">    
+        <div className="bg-white w-[6rem] p-2 h-[8rem] rounded absolute right-3  ">    
           <h1>Be Notified</h1>
           <button className="mt-[4rem] bg-fuchsia-600 text-white rounded text-center w-full" onClick={() => setSign(true)}>Sign Up</button>
         </div>
