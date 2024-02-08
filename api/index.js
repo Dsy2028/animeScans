@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import scanRouter from '../api/router/scanSite.router.js';
+import siteRouter from '../api/router/site.router.js';
 dotenv.config();
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(cors({
 }));
 
 app.use('/api', scanRouter)
+app.use('/api', siteRouter)
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;

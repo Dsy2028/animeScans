@@ -35,12 +35,25 @@ dotenvConfig();
     if(url === urls[1]){
         for (let i = 0; i < 27; i++) {
             await page.keyboard.press('Tab');
-           // await page.waitForTimeout(1000);
           }
-    }else{
+    }else if (url === urls[2]){
+        for (let i = 0; i < 21; i++) {
+            await page.keyboard.press('Tab');
+          }
+    }
+    else if (url === urls[3]){
+      for (let i = 0; i < 23; i++) {
+          await page.keyboard.press('Tab');
+        }
+  }
+  else if (url === urls[4]){
+    for (let i = 0; i < 27; i++) {
+        await page.keyboard.press('Tab');
+      }
+}
+    else{
     for (let i = 0; i < 15; i++) {
         await page.keyboard.press('Tab');
-       // await page.waitForTimeout(1000);
       }
     }
     
@@ -60,7 +73,7 @@ dotenvConfig();
       const headingText = await page.evaluate(() => {
         return document.querySelector('h1').textContent;
       });
-      results.push({ chapter, headingText });    
+      results.push({ chapter, url1});    
     }
     await browser.close();
     return results;
@@ -68,28 +81,31 @@ dotenvConfig();
 }
 
 // Use the function
-const url = ["https://ww4.readkingdom.com/manga/kingdom/", "https://ww10.readonepiece.com/"];
+const url = ["https://ww4.readkingdom.com/manga/kingdom/", "https://ww10.readonepiece.com/","https://ww3.readvinlandsaga.com/","https://ww3.readjujutsukaisen.com/","https://ww8.dbsmanga.com/"];
 getLatestChapter(url).then(async results => {
     for (const result of results) {
-      console.log(`The latest chapter is: ${result.chapter}`);
-      console.log(`The heading text is: ${result.headingText}`);
+     // console.log(`The latest chapter is: ${result.chapter}`);
+     // console.log(`The heading text is: ${result.url1}`);
 
       // Fetch the previous chapter information from the database
       const previousChapter = await scan.findOne({ chapter: result.chapter });
 
       // Check if the latest chapter is the same as the previous fetch
-      if (previousChapter && previousChapter.headingText === result.headingText) {
-        console.log('The latest chapter is the same as the previous fetch');
+      if (previousChapter && previousChapter.url === result.url1) {
+       // console.log('The latest chapter is the same as the previous fetch');
       } else {
-        console.log('The latest chapter is different from the previous fetch');
+       // console.log('The latest chapter is different from the previous fetch');
 
         // Delete the previous chapter information
         if (previousChapter) {
           await scan.deleteOne({ chapter: result.chapter });
         }
+        if(previousChapter === "chromewebdata" ){
+          await scan.deleteOne({ chapter: result.chapter})
+        }
 
         // Save the latest chapter information
-        const newChapter = new scan({ chapter: result.chapter, headingText: result.headingText });
+        const newChapter = new scan({ chapter: result.chapter, url: result.url1 });
         await newChapter.save();
       }
     }
