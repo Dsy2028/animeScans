@@ -11,7 +11,7 @@ function App() {
   const [sign, setSign] = useState(false)
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
-  const f = 0;
+  const [notifRes, setNotifRes] = useState()
      /*   useEffect(() => {
     const interval = setInterval(() => {
       fetch('http://localhost:3000/api/scan')
@@ -42,11 +42,12 @@ function App() {
       body: JSON.stringify({email: email, phone: phone})
     })
     .then(response => response.json())
-    .then(data => console.log(data))
+    .then(data => setNotifRes(data))
     .catch(error => console.log(error))
   }
   //console.log(data)
  //console.log(email)
+ console.log(notifRes)
   return (
     <>
     <div className="min-h-screen w-full bg-slate-700">

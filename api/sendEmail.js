@@ -1,11 +1,12 @@
 
-import nodemailer from 'nodemailer';
+import notifications from './models/email.model.js';
 import Mailjet from 'node-mailjet';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 export const sendEmail = async (req, res, next) => {
+    const all = req.body;
  const email = req.body.email;
   const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
 
@@ -38,4 +39,6 @@ request
   .catch((err) => {
     console.log(err.statusCode)
   });
+  const saveReq =  new  notifications({email: email, phone: all.phone});
+  await saveReq.save();
 }
