@@ -25,7 +25,8 @@ let sendResult;
           '--no-sandbox',
           '--disable-gpu',
           '--enable-webgl',
-          '--window-size=800,800'
+          '--window-size=800,800',
+          '--disable-setuid-sandbox'
         ]
       });
       const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
@@ -132,7 +133,7 @@ getLatestChapter(url).then(async results => {
       request
         .then((result) => {
           //  console.log(result.body)
-          res.status(200).json({success: "Succesfully signed up for notifications"})
+          res.status(200).json({success: "Succesfully sent notification"})
         })
         .catch((err) => {
           console.log(err.statusCode)
@@ -144,7 +145,7 @@ getLatestChapter(url).then(async results => {
 
 // run scan every hour in any day and any
 
-cron.schedule('0 * * * *', async () => {
+cron.schedule('*/10 * * * *', async () => {
   await scanSite();
 });
 
