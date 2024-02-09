@@ -140,7 +140,7 @@ getLatestChapter(url).then(async results => {
           console.log(err.statusCode)
         });
     })
-    res.status(200).send(results);
+   // res.status(200).send(results);
   });
 }
 
