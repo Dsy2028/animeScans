@@ -8,6 +8,7 @@ import Mailjet from 'node-mailjet';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
 dotenv.config();
+console.log('render reading')
 const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
 
 const values = ['Wrong', '2-Step', 'keep', 'Verification', "changed", "find", "Step", "email", "Check", "check", "2", "sent", "valid", "locked", "Type", "Open", "verify", "Verify"];
