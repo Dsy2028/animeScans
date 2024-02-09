@@ -35,7 +35,8 @@ let sendResult;
       for (const url of urls) {
       const page = await browser.newPage();
       await page.setUserAgent(ua);
-      await page.goto(url, { waitUntil: 'networkidle2' });
+      page.setDefaultNavigationTimeout(60000);
+      await page.goto(url, { waitUntil: 'networkidle2' });  
     // Extract the latest chapter from url 
     if(url === urls[1]){
         for (let i = 0; i < 27; i++) {
