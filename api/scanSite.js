@@ -108,6 +108,7 @@ getLatestChapter(url).then(async results => {
     }
     const all = await notifications.find();
     all.map((email) => {
+      const resultUrls = results.map(result => `<a href="${result.url1}">${result.chapter}</a>`).join('<br />'); //TODO: allow user to choose what manga they want to receive notifications for
       const request = mailjet.post('send', {'version': 'v3.1'})
         .request({
           "Messages":[
@@ -124,7 +125,7 @@ getLatestChapter(url).then(async results => {
               ],
               "Subject": "Signed up for notifications",
               "TextPart": `Hello ${email.email}!`,
-              "HTMLPart": `<h3>New scans or chapters are out!</h3><br />visit/<a href="https://ww4.readkingdom.com/manga/kingdom/"></a>`
+              "HTMLPart": `<h3>New scans or chapters are out!</h3><br />${resultUrls}`
             }
           ]
         })   
@@ -141,8 +142,9 @@ getLatestChapter(url).then(async results => {
   });
 }
 
+// run scan every hour in any day and any
 
-cron.schedule('0 */2 * * *', async () => {
+cron.schedule('0 * * * *', async () => {
   await scanSite();
 });
 

@@ -39,6 +39,8 @@ request
   .catch((err) => {
     console.log(err.statusCode)
   });
-  const saveReq =  new  notifications({email: email, phone: all.phone});
-  await saveReq.save();
+  // prevent duplicate documents sharing same info 
+  const saveReq = { email: email, phone: all.phone };
+  await notifications.findOneAndUpdate({ email: email }, saveReq, { upsert: true });
+  
 }
