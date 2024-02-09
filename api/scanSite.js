@@ -28,7 +28,7 @@ let sendResult;
           '--window-size=800,800',
           '--disable-setuid-sandbox'
         ],
-        executablePath: await puppeteer.executablePath(),
+        executablePath: puppeteer.executablePath(),
       });
       const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
       const results = []; 
@@ -56,6 +56,11 @@ let sendResult;
         await page.keyboard.press('Tab');
       }
 }
+else if(url === urls[5]){
+  for (let i = 0; i < 16; i++) {
+      await page.keyboard.press('Tab');
+    }
+  }
     else{
     for (let i = 0; i < 15; i++) {
         await page.keyboard.press('Tab');
@@ -86,7 +91,7 @@ let sendResult;
 }
 
 // Use the function
-const url = ["https://ww4.readkingdom.com/manga/kingdom/", "https://ww10.readonepiece.com/","https://ww3.readvinlandsaga.com/","https://ww3.readjujutsukaisen.com/","https://ww8.dbsmanga.com/"];
+const url = ["https://ww4.readkingdom.com/manga/kingdom/", "https://ww10.readonepiece.com/","https://ww3.readvinlandsaga.com/","https://ww3.readjujutsukaisen.com/","https://ww8.dbsmanga.com/","https://ww4.readopm.com/"];
 getLatestChapter(url).then(async results => {
     for (const result of results) {
       // Fetch the previous chapter information from the database
