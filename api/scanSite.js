@@ -27,7 +27,8 @@ let sendResult;
           '--enable-webgl',
           '--window-size=800,800',
           '--disable-setuid-sandbox'
-        ]
+        ],
+        executablePath: await puppeteer.executablePath(),
       });
       const ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.91 Mobile Safari/537.36';
       const results = []; 
