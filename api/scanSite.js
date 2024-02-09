@@ -152,7 +152,7 @@ getLatestChapter(url).then(async results => {
 
 // run scan every hour in any day and any
 
-cron.schedule('*/10 * * * *', async () => {
+cron.schedule('0 * * * *', async () => {
   await scanSite();
 });
 
