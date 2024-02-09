@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
-
+import 'animate.css';
 
 function App() {
   const [data, setData] = useState()
@@ -13,24 +13,30 @@ function App() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [notifRes, setNotifRes] = useState()
-   /*      useEffect(() => {
-    const interval = setInterval(() => {
-      fetch('http://localhost:3000/api/scan')
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.log(error))
-    }, 10000); // Fetches data every 5 seconds
-
-    // This is important to clear the interval when the component unmounts
-    return () => clearInterval(interval);
-  }, [])  */  
+  const [animationClass, setAnimationClass] = useState('animate__backInUp');
   useEffect(() => {
-      fetch('http://localhost:3000/api/sites')
+      fetch('https://animescans.onrender.com/api/sites')
         .then(response => response.json())
         .then(data => setData(data))
         .catch(error => console.log(error))
-    // This is important to clear the interval when the component unmounts
   }, [])
+  useEffect(() => {
+    if(notifRes !== undefined){
+      setOpen(false)
+      setSign(false)
+    }
+  }, [notifRes]);
+  
+useEffect(() => {
+  if(notifRes){
+    setTimeout(() => {
+      setAnimationClass('animate__backOutDown');
+      setNotifRes(undefined);
+    }, 5000);
+  } else {
+    setAnimationClass('animate__backInUp');
+  }
+}, [notifRes]);
   const toggleDropdown = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -46,6 +52,7 @@ function App() {
     .then(data => setNotifRes(data))
     .catch(error => console.log(error))
   }
+  
   /* if(notifRes !== undefined){
     setOpen(false)
     setSign(false)
@@ -57,8 +64,8 @@ function App() {
     <>
     <div className="min-h-screen w-full bg-slate-700">
       {notifRes && 
-      <div className="inset-0 fixed flex justify-center items-center">
-        <div className="bg-white min-w-[8rem] rounded p-2 flex justify-between items-center z-50">
+      <div className="inset-0 fixed flex justify-center ">
+        <div className={`bg-white min-w-[8rem] rounded p-2 flex justify-between items-center z-50 h-[2.5rem] mt-2 animate__animated animate__backInUp ${animationClass}`}>
         <FontAwesomeIcon icon={faCheckCircle} />
           <h1 className="font-semibold ml-2">{notifRes.success}</h1>
         </div>
@@ -74,7 +81,7 @@ function App() {
             <div className="flex flex-col">
             <input type="text" placeholder="email" className="rounded border-2 p-1 mb-2" onChange={(e) => setEmail(e.target.value)}></input>
             <input type="text" placeholder="phone" className="rounded border-2 p-1 mb-2" onChange={(e) => setPhone(e.target.value)}></input>
-            <button className="bg-fuchsia-600 w-full rounded text-white" onClick={() => sendEmail()}>Submit</button>
+            <button className="bg-fuchsia-600 w-full rounded text-white hover:bg-fuchsia-800" onClick={() => sendEmail()}>Submit</button>
             </div>
           </div>
 

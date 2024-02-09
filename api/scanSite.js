@@ -6,6 +6,7 @@ import scan from './models/site.model.js';
 import notifications from './models/email.model.js';
 import Mailjet from 'node-mailjet';
 import dotenv from 'dotenv';
+import cron from 'node-cron';
 dotenv.config();
 const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
 
@@ -138,4 +139,10 @@ getLatestChapter(url).then(async results => {
     res.status(200).send(results);
   });
 }
+
+
+cron.schedule('0 */2 * * *', async () => {
+  await scanSite();
+});
+
 
