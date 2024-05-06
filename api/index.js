@@ -11,7 +11,7 @@ const app = express();
 
 mongoose.connect(process.env.MONGO)
   .then(() => {
-    app.listen(3000,() => {
+    app.listen(3005,() => {
       console.log('listening on port 3000');
     });
     console.log('connected to mongodb');
@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGO)
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://localhost:5173','https://snack.expo.dev'], 
+  origin: ['http://localhost:5173','https://snack.expo.dev','http://localhost:5173'], 
   credentials: true
 }));
 
