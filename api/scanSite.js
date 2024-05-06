@@ -8,15 +8,15 @@ import Mailjet from 'node-mailjet';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
 dotenv.config();
-console.log('render reading')
-const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
+
+//const mailjet = Mailjet.apiConnect(process.env.MAIL_API, process.env.MAIL_SECRET)
 
 const values = ['Wrong', '2-Step', 'keep', 'Verification', "changed", "find", "Step", "email", "Check", "check", "2", "sent", "valid", "locked", "Type", "Open", "verify", "Verify"];
 puppeteer.use(StealthPlugin());
 puppeteer.use(AdblockerPlugin());
 
 
-let sendResult;
+
   export const  scanSite = async (req,res) => {
    async function getLatestChapter(urls) {
     const browser = await puppeteer.launch({
@@ -115,7 +115,10 @@ getLatestChapter(url).then(async results => {
       }
     }
     const all = await notifications.find();
-    all.map((email) => {
+   const checkResult = results.map(result => result.chapter);
+   const prevResult = await scan.findOne(checkResult);
+   console.log('prevResult',prevResult,'checkResult', checkResult)
+  /  all.map((email) => {
       const resultUrls = results.map(result => `<a href="${result.url1}">${result.chapter}</a>`).join('<br />'); //TODO: allow user to choose what manga they want to receive notifications for
       const request = mailjet.post('send', {'version': 'v3.1'})
         .request({
@@ -145,7 +148,7 @@ getLatestChapter(url).then(async results => {
         .catch((err) => {
           console.log(err.statusCode)
         });
-    })
+    }) 
    // res.status(200).send(results);
   });
 }
