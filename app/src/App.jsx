@@ -15,7 +15,7 @@ function App() {
   const [notifRes, setNotifRes] = useState()
   const [animationClass, setAnimationClass] = useState('animate__backInUp');
   useEffect(() => {
-      fetch('https://animescans.onrender.com/api/sites')
+      fetch('http://localhost:3005/api/sites')
         .then(response => response.json())
         .then(data => setData(data))
         .catch(error => console.log(error))
@@ -41,7 +41,7 @@ useEffect(() => {
     setOpen((prevOpen) => !prevOpen);
   };
   const sendEmail = () => {
-    fetch('http://localhost:3000/api/email', {
+    fetch('http://localhost:3005/api/email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

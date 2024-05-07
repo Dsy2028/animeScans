@@ -22,10 +22,7 @@ mongoose.connect(process.env.MONGO)
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: ['http://localhost:5173','https://snack.expo.dev','http://localhost:5174'], 
-  credentials: true
-}));
+app.use(cors());
 
 app.use('/api', scanRouter)
 app.use('/api', siteRouter)
